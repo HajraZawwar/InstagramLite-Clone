@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Notifications - Instagram Lite</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+</head>
+<body class="bg-gray-50 font-sans">
+
+<!-- Navbar -->
+<nav class="bg-white shadow-md py-4 sticky top-0 z-50">
+  <div class="container mx-auto flex items-center justify-between px-4">
+    <div class="flex items-center space-x-4">
+      <i class="fab fa-instagram text-3xl text-purple-500"></i>
+      <span class="text-xl font-semibold">Instagram Lite</span>
+    </div>
+    <div class="flex items-center space-x-6 text-xl text-gray-600">
+      <a href="followers.html"><i class="fas fa-user-friends hover:text-purple-500 cursor-pointer"></i></a>
+      <i class="fas fa-bell text-purple-500"></i> <!-- Active notifications icon -->
+      <i class="fas fa-user-circle hover:text-purple-500 cursor-pointer"></i>
+    </div>
+  </div>
+</nav>
+
+<!-- Filters -->
+<div class="container mx-auto mt-6 px-4">
+  <div class="flex space-x-4 mb-4">
+    <button onclick="filterNotifications('all')" class="filter-btn bg-purple-500 text-white px-4 py-2 rounded">All</button>
+    <button onclick="filterNotifications('like')" class="filter-btn bg-gray-200 hover:bg-purple-100 text-gray-700 px-4 py-2 rounded">Likes</button>
+    <button onclick="filterNotifications('comment')" class="filter-btn bg-gray-200 hover:bg-purple-100 text-gray-700 px-4 py-2 rounded">Comments</button>
+    <button onclick="filterNotifications('follow')" class="filter-btn bg-gray-200 hover:bg-purple-100 text-gray-700 px-4 py-2 rounded">Follows</button>
+  </div>
+
+  <!-- Notification List -->
+  <div id="notificationsList" class="space-y-4">
+    <!-- Dynamic notifications will appear here -->
+  </div>
+</div>
+
+<script>
+  const notifications = [
+    { id: 1, type: 'like', user: 'Ali Raza', message: 'liked your photo.', time: '2 min ago' },
+    { id: 2, type: 'comment', user: 'Zara Sheikh', message: 'commented: Amazing shot!', time: '5 min ago' },
+    { id: 3, type: 'follow', user: 'Usman Tariq', message: 'started following you.', time: '10 min ago' },
+    { id: 4, type: 'like', user: 'Maham Ali', message: 'liked your reel.', time: '15 min ago' },
+    { id: 5, type: 'comment', user: 'Noor Fatima', message: 'commented: Beautiful!', time: '1 hour ago' }
+  ];
+
+  const listContainer = document.getElementById('notificationsList');
+
+  function renderNotifications(filteredType = 'all') {
+    listContainer.innerHTML = '';
+
+    const filtered = filteredType === 'all'
+      ? notifications
+      : notifications.filter(n => n.type === filteredType);
+
+    filtered.forEach(n => {
+      const card = document.createElement('div');
+      card.className = 'bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow flex justify-between items-center';
+
+      card.innerHTML = `
+        <div class="flex items-center space-x-4">
+          <i class="fas fa-${n.type === 'like' ? 'heart text-red-500' : n.type === 'comment' ? 'comment text-blue-500' : 'user-plus text-green-500'} text-xl"></i>
+          <div>
+            <p class="text-gray-700"><span class="font-semibold">${n.user}</span> ${n.message}</p>
+            <p class="text-sm text-gray-400">${n.time}</p>
+          </div>
+        </div>
+        <i class="fas fa-ellipsis-h text-gray-400"></i>
+      `;
+
+      listContainer.appendChild(card);
+    });
+  }
+
+  function filterNotifications(type) {
+    renderNotifications(type);
+    document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('bg-purple-500', 'text-white'));
+    const clicked = Array.from(document.querySelectorAll('.filter-btn')).find(btn => btn.innerText.toLowerCase().includes(type));
+    if (clicked) clicked.classList.add('bg-purple-500', 'text-white');
+  }
+
+  renderNotifications();
+</script>
+
+</body>
+</html>

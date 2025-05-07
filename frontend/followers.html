@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Followers - Instagram Lite</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+</head>
+<body class="bg-gray-50 font-sans">
+
+<!-- Navbar -->
+<nav class="bg-white shadow-md py-4 sticky top-0 z-50">
+  <div class="container mx-auto flex items-center justify-between px-4">
+    <div class="flex items-center space-x-4">
+      <i class="fab fa-instagram text-3xl text-purple-500"></i>
+      <span class="text-xl font-semibold text-gray-800">Instagram Lite</span>
+    </div>
+    <div class="flex items-center space-x-6 text-xl text-gray-600">
+      <i class="fas fa-home hover:text-purple-500 cursor-pointer"></i>
+      <i class="fas fa-user-friends text-purple-500"></i> <!-- Active icon -->
+      <i class="fas fa-user-circle hover:text-purple-500 cursor-pointer"></i>
+    </div>
+  </div>
+</nav>
+
+<!-- Followers Section -->
+<section class="container mx-auto mt-8 px-4">
+  <h2 class="text-2xl font-bold text-gray-700 mb-4">Your Followers</h2>
+  <div id="followersList" class="space-y-4">
+    <!-- JavaScript will inject cards -->
+  </div>
+</section>
+
+<script>
+  const followers = [
+    { id: 1, name: 'Ayesha Khan', avatar: 'https://randomuser.me/api/portraits/women/1.jpg', following: false },
+    { id: 2, name: 'Ali Raza', avatar: 'https://randomuser.me/api/portraits/men/2.jpg', following: true },
+    { id: 3, name: 'Zara Sheikh', avatar: 'https://randomuser.me/api/portraits/women/3.jpg', following: false },
+    { id: 4, name: 'Usman Tariq', avatar: 'https://randomuser.me/api/portraits/men/4.jpg', following: true }
+  ];
+
+  const listContainer = document.getElementById('followersList');
+
+  function renderFollowers() {
+    listContainer.innerHTML = '';
+    followers.forEach(user => {
+      const card = document.createElement('div');
+      card.className = 'bg-white p-4 rounded-lg shadow flex items-center justify-between';
+
+      const buttonColor = user.following ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600';
+      const buttonText = user.following ? 'Unfollow' : 'Follow';
+
+      card.innerHTML = `
+        <div class="flex items-center space-x-4">
+          <img src="${user.avatar}" alt="${user.name}" class="w-12 h-12 rounded-full object-cover">
+          <div>
+            <p class="font-semibold text-gray-800">${user.name}</p>
+            <p class="text-sm text-gray-500">Follower</p>
+          </div>
+        </div>
+        <button class="toggle-btn ${buttonColor} text-white px-4 py-2 rounded transition" data-id="${user.id}">
+          ${buttonText}
+        </button>
+      `;
+
+      listContainer.appendChild(card);
+    });
+
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = +btn.dataset.id;
+        const user = followers.find(f => f.id === id);
+        user.following = !user.following;
+        renderFollowers();
+      });
+    });
+  }
+
+  renderFollowers();
+</script>
+
+</body>
+</html>
+
+
+
+
+
+

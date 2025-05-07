@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Search - Instagram Lite</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+</head>
+<body class="bg-gray-100 font-sans">
+
+<!-- Navbar -->
+<nav class="bg-white shadow-md py-4 sticky top-0 z-50">
+  <div class="container mx-auto flex items-center justify-between px-4">
+    <div class="flex items-center space-x-4">
+      <i class="fab fa-instagram text-3xl text-purple-500"></i>
+      <span class="text-xl font-semibold">Instagram Lite</span>
+    </div>
+    <div class="flex items-center space-x-6 text-xl text-gray-600">
+      <a href="followers.html"><i class="fas fa-user-friends hover:text-purple-500 cursor-pointer"></i></a>
+      <a href="notifications.html"><i class="fas fa-bell hover:text-purple-500 cursor-pointer"></i></a>
+      <a href="messages.html"><i class="fas fa-envelope hover:text-purple-500 cursor-pointer"></i></a>
+      <i class="fas fa-search text-purple-500"></i> <!-- Active Icon -->
+    </div>
+  </div>
+</nav>
+
+<!-- Search Section -->
+<div class="max-w-4xl mx-auto mt-8 px-4">
+  <div class="mb-6">
+    <input id="searchInput" type="text" placeholder="Search people, hashtags, or places..."
+           class="w-full px-4 py-3 border rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500 shadow-sm" />
+  </div>
+  
+  <div id="resultsGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <!-- Search results will go here -->
+  </div>
+</div>
+
+<script>
+  
+  const mockData = [
+  // Users
+  { type: 'user', name: 'Ali Raza', avatar: 'https://randomuser.me/api/portraits/men/2.jpg' },
+  { type: 'user', name: 'Ayesha Khan', avatar: 'https://randomuser.me/api/portraits/women/3.jpg' },
+  { type: 'user', name: 'Zara Sheikh', avatar: 'https://randomuser.me/api/portraits/women/4.jpg' },
+  { type: 'user', name: 'Bilal Hashmi', avatar: 'https://randomuser.me/api/portraits/men/5.jpg' },
+  { type: 'user', name: 'Mehwish Raza', avatar: 'https://randomuser.me/api/portraits/women/6.jpg' },
+  { type: 'user', name: 'Tariq Jamil', avatar: 'https://randomuser.me/api/portraits/men/7.jpg' },
+  { type: 'user', name: 'Hina Niazi', avatar: 'https://randomuser.me/api/portraits/women/8.jpg' },
+  { type: 'user', name: 'Asad Qureshi', avatar: 'https://randomuser.me/api/portraits/men/9.jpg' },
+  { type: 'user', name: 'Sana Fatima', avatar: 'https://randomuser.me/api/portraits/women/10.jpg' },
+
+  // Hashtags
+  { type: 'hashtag', name: '#nature' },
+  { type: 'hashtag', name: '#fitness' },
+  { type: 'hashtag', name: '#travel' },
+  { type: 'hashtag', name: '#foodie' },
+  { type: 'hashtag', name: '#sunset' },
+  { type: 'hashtag', name: '#instagood' },
+  { type: 'hashtag', name: '#motivation' },
+  { type: 'hashtag', name: '#designlife' },
+  { type: 'hashtag', name: '#codinglife' },
+  { type: 'hashtag', name: '#photography' },
+
+  // Locations
+  { type: 'location', name: 'Lahore, Pakistan' },
+  { type: 'location', name: 'Karachi, Pakistan' },
+  { type: 'location', name: 'Islamabad, Pakistan' },
+  { type: 'location', name: 'New York, USA' },
+  { type: 'location', name: 'London, UK' },
+  { type: 'location', name: 'Istanbul, Turkey' },
+  { type: 'location', name: 'Dubai, UAE' },
+  { type: 'location', name: 'Tokyo, Japan' },
+  { type: 'location', name: 'Delhi, India' },
+  { type: 'location', name: 'Sydney, Australia' }
+];
+
+  
+
+  const searchInput = document.getElementById('searchInput');
+  const resultsGrid = document.getElementById('resultsGrid');
+
+  function renderResults(filtered) {
+    resultsGrid.innerHTML = '';
+
+    filtered.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'bg-white p-4 rounded-lg shadow flex items-center space-x-4';
+
+      if (item.type === 'user') {
+        card.innerHTML = `
+          <img src="${item.avatar}" alt="${item.name}" class="w-12 h-12 rounded-full object-cover" />
+          <div>
+            <p class="font-semibold text-gray-700">${item.name}</p>
+            <p class="text-sm text-gray-500">@${item.name.toLowerCase().replace(/\s+/g, '_')}</p>
+          </div>
+        `;
+      } else if (item.type === 'hashtag') {
+        card.innerHTML = `
+          <div>
+            <p class="text-purple-600 font-semibold text-lg">${item.name}</p>
+            <p class="text-sm text-gray-500">Popular hashtag</p>
+          </div>
+        `;
+      } else if (item.type === 'location') {
+        card.innerHTML = `
+          <div>
+            <p class="text-blue-600 font-semibold text-lg">${item.name}</p>
+            <p class="text-sm text-gray-500">Location</p>
+          </div>
+        `;
+      }
+
+      resultsGrid.appendChild(card);
+    });
+  }
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.toLowerCase();
+    const filtered = mockData.filter(item =>
+      item.name.toLowerCase().includes(query)
+    );
+    renderResults(filtered);
+  });
+
+  // Initially show all
+  renderResults(mockData);
+</script>
+
+</body>
+</html>
